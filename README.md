@@ -84,15 +84,35 @@ pip install -r requirements-dev.txt #(may require python -m)
 
 3. **Run the application**:
 
-```bash
-python main.py #(may require python -m)
+Run the Task Manager app from the project folder with this command:
+
+```powershell
+.\.venv\Scripts\python.exe main.py --help
 ```
 
-Explore the current functionality. Try adding, deleting, and listing tasks.
+Try using the app to add, view, and delete tasks.
+
+Example commands:
+
+```powershell
+.\.venv\Scripts\python.exe main.py add --title "Study Python" --description "Complete assessment" --due-date "30-10-2026"
+.\.venv\Scripts\python.exe main.py list
+.\.venv\Scripts\python.exe main.py delete --title "Study Python"
+```
 
 4. **Read the Documentation**:
    - Review the `onboarding.md` file for project setup and guidelines.
    - Examine the current `README.md` and inline comments for existing functionality.
+
+#### Run the tests
+
+To check that the application works correctly, run these tests:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -s tests
+```
+
+These tests check the task management features and the Click commands.
 
 ---
 

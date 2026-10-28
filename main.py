@@ -1,36 +1,45 @@
+import click
+
 from src.task_manager import add_task, delete_task, list_tasks
 from src.file_handler import load_tasks
 
 
-def main():
-    tasks = load_tasks()
-    while True:
-        print("\nTask Manager CLI")
-        print("1. Add Task")
-        print("2. Delete Task")
-        print("3. List Tasks")
-        print("4. Exit")
+@click.group()
+def cli():
+    """Manage tasks from the command line."""
+    pass
 
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            title = input("Title: ")
-            description = input("Description: ")
-            due_date = input("Due Date (DD-MM-YYYY): ")
-            add_task(tasks, title, description, due_date)
-        elif choice == "2":
-            title = input("Title of the task to delete: ")
-            if delete_task(tasks, title):
-                print("Task deleted successfully.")
-            else:
-                print("Task not found.")
-        elif choice == "3":
-            list_tasks(tasks)
-        elif choice == "4":
-            print("Exiting Task Manager.")
-            break
-        else:
-            print("Invalid choice. Try again.")
+
+@cli.command()
+@click.option("--title", prompt="Title")
+@click.option("--description", prompt="Description")
+@click.option("--due-date", prompt="Due Date (DD-MM-YYYY)")
+def add(title, description, due_date):
+    """Add a new task."""
+    tasks = load_tasks()
+
+    if add_task(tasks, title, description, due_date):
+        click.echo("Task added successfully.")
+
+
+@cli.command()
+def list():
+    """List all tasks."""
+    tasks = load_tasks()
+    list_tasks(tasks)
+
+
+@cli.command()
+@click.option("--title", prompt="Title of the task to delete")
+def delete(title):
+    """Delete a task by its title."""
+    tasks = load_tasks()
+
+    if delete_task(tasks, title):
+        click.echo("Task deleted successfully.")
+    else:
+        click.echo("Task not found.")
 
 
 if __name__ == "__main__":
-    main()
+    cli()
