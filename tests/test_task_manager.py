@@ -3,6 +3,7 @@ from src.task_manager import add_task, delete_task, filter_tasks_by_status
 from src.file_handler import save_tasks, load_tasks
 from src.task import Task
 import os
+from unittest.mock import mock_open, patch
 
 TEST_FILE = "test_tasks.bin"
 
@@ -94,6 +95,15 @@ class TestTaskManager(unittest.TestCase):
         loaded_tasks = load_tasks()
         self.assertEqual(len(loaded_tasks), 1)
         self.assertEqual(loaded_tasks[0].title, "Persistent Task")
+
+    def test_load_corrupted_file(self):
+        """
+        Test handling of a corrupted task file.
+        """
+        with patch("src.file_handler.os.path.exists", return_value=True):
+            with patch("builtins.open", mock_open(read_data=b"invalid")):
+                result = load_tasks()
+                self.assertEqual(result, [])
 
 
 if __name__ == "__main__":

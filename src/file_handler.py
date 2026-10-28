@@ -13,8 +13,11 @@ def load_tasks():
               If the file does not exist, an empty list is returned.
     """
     if os.path.exists(TASK_FILE):
-        with open(TASK_FILE, "rb") as file:
-            return pickle.load(file)
+        try:
+            with open(TASK_FILE, "rb") as file:
+                return pickle.load(file)
+        except (pickle.UnpicklingError, EOFError, OSError):
+            return []
     return []
 
 
